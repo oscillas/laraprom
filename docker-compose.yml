@@ -1,7 +1,27 @@
+x-laraprom-db: &laraprom laraprom
+
 services:
   php:
     build:
       context: .
       dockerfile: Dockerfile
+    depends_on:
+      pgsql:
+        condition: service_healthy
+    environment:
+      DB_CONNECTION: pgsql
+      DB_HOST: pgsql
+      DB_PORT: 5432
+      DB_DATABASE: *laraprom
+      DB_USERNAME: *laraprom
+      DB_PASSWORD: *laraprom
     volumes:
       - .:/app
+
+  pgsql:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: *laraprom
+      POSTGRES_PASSWORD: *laraprom
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", *laraprom]
