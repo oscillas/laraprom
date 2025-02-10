@@ -24,5 +24,8 @@
             "@build",
             "@php vendor/bin/testbench serve --ansi"
         ]
+    },
+    "require": {
+        "laravel/framework": "^11"
     }
 }
