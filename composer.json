@@ -3,6 +3,11 @@
     "require-dev": {
         "orchestra/testbench": "^9.9"
     },
+    "autoload": {
+        "psr-4": {
+            "Oscillas\\Laraprom\\": "src/"
+        }
+    },
     "autoload-dev": {
         "psr-4": {
             "Tests\\": "tests/",
