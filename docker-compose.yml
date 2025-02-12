@@ -8,6 +8,8 @@ services:
     depends_on:
       pgsql:
         condition: service_healthy
+      valkey:
+        condition: service_healthy
     environment:
       APP_ENV: testing
       APP_KEY: base64:IeQycoOSOeLHOfI/6h2XCR/W8HPBZay3B6cmQSivLpc=
@@ -27,3 +29,8 @@ services:
       POSTGRES_PASSWORD: *laraprom
     healthcheck:
       test: ["CMD", "pg_isready", "-U", *laraprom]
+
+  valkey:
+    image: valkey/valkey:8-alpine
+    healthcheck:
+      test: ["CMD", "valkey-cli", "ping"]
