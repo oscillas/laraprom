@@ -15,7 +15,7 @@ class LarapromServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->bind(RendererInterface::class, RenderTextFormat::class);
     }
 
     /**

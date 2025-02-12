@@ -1,7 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Oscillas\Laraprom\Http\PrometheusMetricsController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get(
+    '/metrics',
+    PrometheusMetricsController::class
+)->name('prometheus');
