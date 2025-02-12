@@ -52,4 +52,22 @@ class PrometheusMetricsControllerTest extends TestCase
         $response->assertSeeText("# TYPE {$namespace}_{$name} gauge");
         $response->assertSeeText("{$namespace}_{$name}{label1=\"value1\",label2=\"value2\"} 123", escape: false);
     }
+
+    #[Test]
+    public function renders_empty_metrics_when_no_metrics_are_registered(): void
+    {
+        // Arrange: Don't need to create anything since it's already bound by default in the Service Provider
+        // Act: call the /metrics endpoint.
+        $response = $this->get(route('prometheus'));
+
+        // Assert: verify the response status and Content-Type header.
+        $response->assertStatus(200);
+        $response->assertHeader(
+            'Content-Type',
+            'text/plain; version=0.0.4; charset=UTF-8'
+        );
+
+        // Assert that the returned content is empty.
+        $response->assertSeeHtml('');
+    }
 }
