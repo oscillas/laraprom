@@ -9,7 +9,9 @@ RUN apt-get update && apt-get upgrade -y \
     && docker-php-ext-install \
       pdo  \
       pdo_pgsql  \
-      zip
+      zip \
+    && pecl install redis \
+    && docker-php-ext-enable redis
 
 # Install Composer
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
