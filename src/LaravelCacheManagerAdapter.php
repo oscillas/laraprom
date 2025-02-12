@@ -2,15 +2,15 @@
 
 namespace Oscillas\Laraprom;
 
-use Illuminate\Contracts\Cache\Repository;
+use Illuminate\Cache\CacheManager;
 use Prometheus\Storage\Adapter;
 use Prometheus\Storage\InMemory;
 
-class LaravelCacheRepositoryAdapter extends InMemory implements Adapter
+class LaravelCacheManagerAdapter extends InMemory implements Adapter
 {
     const string CACHE_KEY = 'LARAPROM_PROMETHEUS_METRICS';
 
-    public function __construct(protected Repository $cache)
+    public function __construct(protected CacheManager $cache)
     {
     }
 

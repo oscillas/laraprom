@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use Oscillas\Laraprom\LaravelCacheRepositoryAdapter;
+use Oscillas\Laraprom\LaravelCacheManagerAdapter;
 use PHPUnit\Framework\Attributes\Test;
 use Prometheus\Counter;
 use Prometheus\Gauge;
@@ -15,14 +15,14 @@ class LaravelCacheRepositoryAdapterTest extends TestCase
 {
     private function updateAndAssertMetric(array $data, string $updateMethod, ?float $expectedValue = null): void
     {
-        $cache = $this->app->make('cache.store');
-        $adapter = new LaravelCacheRepositoryAdapter($cache);
+        $cache = $this->app->make('cache');
+        $adapter = new LaravelCacheManagerAdapter($cache);
 
         // Call the update method that was passed in.
         $adapter->$updateMethod($data);
 
         // Reinstantiate the adapter to simulate retrieving from cache.
-        $newAdapter = new LaravelCacheRepositoryAdapter($cache);
+        $newAdapter = new LaravelCacheManagerAdapter($cache);
         $metrics = $newAdapter->collect();
 
         // Find the metric family by name.
