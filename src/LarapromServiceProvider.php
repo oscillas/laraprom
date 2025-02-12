@@ -18,7 +18,11 @@ class LarapromServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->bind(RegistryInterface::class, fn() => new CollectorRegistry(new InMemory(), false));
+        $this->app->bind(RegistryInterface::class, function () {
+            $storageAdapter = new LaravelCacheManagerAdapter($this->app->make('cache'));
+            return new CollectorRegistry($storageAdapter, false);
+        });
+
         $this->app->bind(RendererInterface::class, RenderTextFormat::class);
     }
 
