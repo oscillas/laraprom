@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use Orchestra\Testbench\Concerns\WithWorkbench;
 use Oscillas\Laraprom\LaravelCacheManagerAdapter;
 use PHPUnit\Framework\Attributes\Test;
 use Prometheus\Counter;
@@ -11,8 +12,10 @@ use Prometheus\Storage\Adapter;
 use Prometheus\Summary;
 use Tests\TestCase;
 
-class LaravelCacheRepositoryAdapterTest extends TestCase
+class LaravelCacheManagerAdapterTest extends TestCase
 {
+    use WithWorkbench;
+
     private function updateAndAssertMetric(array $data, string $updateMethod, ?float $expectedValue = null): void
     {
         $cache = $this->app->make('cache');
