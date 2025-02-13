@@ -35,6 +35,7 @@
     },
     "require": {
         "laravel/framework": "^11",
-        "promphp/prometheus_client_php": "^2.13"
+        "promphp/prometheus_client_php": "^2.13",
+        "aws/aws-sdk-php": " ^3.323",
     }
 }
