@@ -9,6 +9,7 @@ use GuzzleHttp\Client;
 use Orchestra\Testbench\Concerns\WithWorkbench;
 use Oscillas\Laraprom\Helpers\ApplicationMonitoringHelperInterface;
 use Oscillas\Laraprom\Helpers\DatadogMonitoringHelper;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class DatadogMonitoringHelperTest extends TestCase
@@ -25,7 +26,7 @@ class DatadogMonitoringHelperTest extends TestCase
         $this->datadogHelper = app(ApplicationMonitoringHelperInterface::class);
     }
 
-    /** @test */
+    #[Test]
     public function build_datadog_event_object_and_report_it(): void
     {
         # Arrange
@@ -68,7 +69,7 @@ class DatadogMonitoringHelperTest extends TestCase
         $this->assertEquals($body, $events[0]['text']);
     }
 
-    /** @test */
+    #[Test]
     public function build_datadog_metric_object_and_report_it(): void
     {
         # Arrange

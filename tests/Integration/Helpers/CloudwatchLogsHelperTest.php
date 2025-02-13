@@ -9,6 +9,7 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
 use Orchestra\Testbench\Concerns\WithWorkbench;
 use Oscillas\Laraprom\Helpers\CloudwatchLogsHelper;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 
@@ -16,7 +17,7 @@ class CloudwatchLogsHelperTest extends TestCase
 {
     use WithWorkbench;
 
-    /** @test */
+    #[Test]
     public function pushes_expected_format_to_cloudwatch_logs(): void
     {
         # Arrange
@@ -97,7 +98,7 @@ class CloudwatchLogsHelperTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function if_log_stream_already_exists_push_to_existing_stream(): void
     {
         # Arrange
@@ -200,7 +201,7 @@ class CloudwatchLogsHelperTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function specifying_region_in_constructor_overrides_default_us_east_1(): void
     {
         # Arrange
