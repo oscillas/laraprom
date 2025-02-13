@@ -3,7 +3,8 @@
     "version": "0.0.2",
     "license": "MIT",
     "require-dev": {
-        "orchestra/testbench": "^9.9"
+        "orchestra/testbench": "^9.9",
+        "phpunit/phpunit": "^11"
     },
     "autoload": {
         "psr-4": {
