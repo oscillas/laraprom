@@ -29,6 +29,7 @@ final class PrometheusMonitoringHelperTest extends TestCase
             'Test event text'
         );
     }
+
     #[Test]
     public function putting_a_single_metric_saves_gauge_to_registry_interface(): void
     {

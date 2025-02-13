@@ -14,6 +14,7 @@ use Prometheus\CollectorRegistry;
 use Prometheus\RegistryInterface;
 use Prometheus\RendererInterface;
 use Prometheus\RenderTextFormat;
+use Oscillas\Laraprom\Helpers\PrometheusMonitoringHelper;
 
 class LarapromServiceProvider extends ServiceProvider
 {
@@ -50,6 +51,7 @@ class LarapromServiceProvider extends ServiceProvider
                         ]
                     ])
                 ),
+                'prometheus' => new PrometheusMonitoringHelper($this->app->make(RegistryInterface::class)),
                 default => throw new \InvalidArgumentException("Unsupported application monitoring driver: {$driver}"),
             };
         });
