@@ -19,6 +19,7 @@ services:
       DB_DATABASE: *laraprom
       DB_USERNAME: *laraprom
       DB_PASSWORD: *laraprom
+    env_file: .env
     volumes:
       - .:/app
 
