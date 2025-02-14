@@ -38,6 +38,7 @@ class PrometheusMonitoringHelper implements ApplicationMonitoringHelperInterface
                 'Automatically registered gauge',
                 array_keys($dimensions)
             );
+
             $gauge->set($metricData['Value'], $dimensions);
         }
     }
