@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace Oscillas\Laraprom\Helpers;
 
 use InvalidArgumentException;
+use Oscillas\Laraprom\Reporters\MetricReporterInterface;
 use Prometheus\CollectorRegistry;
 use Prometheus\Exception\MetricsRegistrationException;
 
-class PrometheusMonitoringHelper implements ApplicationMonitoringHelperInterface
+class PrometheusMonitoringHelper implements MetricReporterInterface
 {
     private CollectorRegistry $registry;
 
@@ -28,6 +29,16 @@ class PrometheusMonitoringHelper implements ApplicationMonitoringHelperInterface
     ): void {
         if ([] === $metrics) {
             throw new InvalidArgumentException('$metrics array cannot be empty.');
+        } else {
+            foreach ($metrics as $metric) {
+                if (!isset($metric['Value'])) {
+                    throw new InvalidArgumentException('Each metric must have a "Value" key.');
+                }
+
+                if (!isset($metric['Unit'])) {
+                    throw new InvalidArgumentException('Each metric must have a "Unit" key.');
+                }
+            }
         }
 
         foreach ($metrics as $metricName => $metricData) {
@@ -41,14 +52,5 @@ class PrometheusMonitoringHelper implements ApplicationMonitoringHelperInterface
 
             $gauge->set($metricData['Value'], $dimensions);
         }
-    }
-
-    public function putEvent(
-        string $title,
-        int $unixTimestampMillis,
-        array $dimensions,
-        string $text
-    ): void {
-        throw new \BadMethodCallException("Function 'putEvent' is not implemented for PrometheusMonitoringHelper. Prometheus is not designed to handle events.");
     }
 }
