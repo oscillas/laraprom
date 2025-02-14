@@ -4,19 +4,14 @@ declare(strict_types=1);
 
 namespace Oscillas\Laraprom\Helpers;
 
-interface ApplicationMonitoringHelperInterface
-{
-    public function putEvent(
-        string $title,
-        int $unixTimestampMillis,
-        array $dimensions,
-        string $text,
-    ): void;
+use Oscillas\Laraprom\Reporters\EventReporterInterface;
+use Oscillas\Laraprom\Reporters\MetricReporterInterface;
 
-    public function putMetric(
-        string $namespace,
-        int $unixTimestampMillis,
-        array $dimensions,
-        array $metrics,
-    ): void;
+/**
+ * @deprecated 0.0.5 Should not be used for new code. Use EventReporterInterface or MetricReporterInterface instead.
+ * @see EventReporterInterface
+ * @see MetricReporterInterface
+ */
+interface ApplicationMonitoringHelperInterface extends EventReporterInterface, MetricReporterInterface
+{
 }
