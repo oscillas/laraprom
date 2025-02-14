@@ -2,9 +2,10 @@
 
 namespace Tests\TestDoubles\Listeners;
 
-use Oscillas\Laraprom\Helpers\ApplicationMonitoringHelperInterface;
+use Oscillas\Laraprom\Reporters\EventReporterInterface;
+use Oscillas\Laraprom\Reporters\MetricReporterInterface;
 
-class FakeApplicationMonitoringHelper implements ApplicationMonitoringHelperInterface
+class FakeApplicationMonitoringHelper implements EventReporterInterface, MetricReporterInterface
 {
     public array $metrics = [];
 
