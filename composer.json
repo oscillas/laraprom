@@ -1,6 +1,6 @@
 {
     "name": "oscillas/laraprom",
-    "version": "0.0.4",
+    "version": "0.1.0",
     "license": "MIT",
     "require-dev": {
         "orchestra/testbench": "^9.9",
