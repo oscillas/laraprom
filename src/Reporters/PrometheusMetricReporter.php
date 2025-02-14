@@ -2,14 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Oscillas\Laraprom\Helpers;
+namespace Oscillas\Laraprom\Reporters;
 
 use InvalidArgumentException;
-use Oscillas\Laraprom\Reporters\MetricReporterInterface;
 use Prometheus\CollectorRegistry;
 use Prometheus\Exception\MetricsRegistrationException;
 
-class PrometheusMonitoringHelper implements MetricReporterInterface
+class PrometheusMetricReporter implements MetricReporterInterface
 {
     private CollectorRegistry $registry;
 

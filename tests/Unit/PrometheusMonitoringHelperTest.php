@@ -3,12 +3,12 @@
 namespace Tests\Unit;
 
 use Oscillas\Laraprom\Reporters\MetricReporterInterface;
+use Oscillas\Laraprom\Reporters\PrometheusMetricReporter;
 use PHPUnit\Framework\Attributes\Test;
-use Prometheus\Gauge;
-use Tests\TestCase;
 use Prometheus\CollectorRegistry;
+use Prometheus\Gauge;
 use Prometheus\Storage\InMemory;
-use Oscillas\Laraprom\Helpers\PrometheusMonitoringHelper;
+use Tests\TestCase;
 
 final class PrometheusMonitoringHelperTest extends TestCase
 {
@@ -16,12 +16,12 @@ final class PrometheusMonitoringHelperTest extends TestCase
 
     private CollectorRegistry $registry;
 
-    private PrometheusMonitoringHelper $reporter;
+    private PrometheusMetricReporter $reporter;
 
     protected function getMetricReporter(): MetricReporterInterface
     {
         $this->registry = new CollectorRegistry(new InMemory(), false);
-        $this->reporter = new PrometheusMonitoringHelper($this->registry);
+        $this->reporter = new PrometheusMetricReporter($this->registry);
         return $this->reporter;
     }
 
@@ -59,7 +59,7 @@ final class PrometheusMonitoringHelperTest extends TestCase
     {
         // Arrange
         $registry = new CollectorRegistry(new InMemory(), false);
-        $helper = new PrometheusMonitoringHelper($registry);
+        $helper = new PrometheusMetricReporter($registry);
         $namespace = 'test';
         $metricName = 'requests_total';
         $dimensions = ['env' => 'dev'];
