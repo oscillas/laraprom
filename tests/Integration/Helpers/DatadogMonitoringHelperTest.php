@@ -7,7 +7,6 @@ namespace Tests\Integration\Helpers;
 use Carbon\CarbonImmutable;
 use GuzzleHttp\Client;
 use Orchestra\Testbench\Concerns\WithWorkbench;
-use Oscillas\Laraprom\Helpers\ApplicationMonitoringHelperInterface;
 use Oscillas\Laraprom\Helpers\DatadogMonitoringHelper;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
