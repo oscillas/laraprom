@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use Orchestra\Testbench\Concerns\WithWorkbench;
 use Oscillas\Laraprom\Helpers\ApplicationMonitoringHelperInterface;
+use Oscillas\Laraprom\Reporters\MetricReporterInterface;
 use Oscillas\Laraprom\Reporters\PrometheusMetricReporter;
 use Tests\TestCase;
 
@@ -17,7 +18,7 @@ class LarapromServiceProviderTest extends TestCase
         config(['application_monitoring.default' => 'prometheus']);
         
         // Resolve the monitoring helper from the container
-        $helper = $this->app->make(ApplicationMonitoringHelperInterface::class);
+        $helper = $this->app->make(MetricReporterInterface::class);
         
         // Assert we get the PrometheusMonitoringHelper
         $this->assertInstanceOf(PrometheusMetricReporter::class, $helper);

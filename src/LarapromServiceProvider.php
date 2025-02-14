@@ -6,10 +6,10 @@ namespace Oscillas\Laraprom;
 
 use GuzzleHttp\Client;
 use Illuminate\Support\ServiceProvider;
-use Oscillas\Laraprom\Helpers\ApplicationMonitoringHelperInterface;
 use Oscillas\Laraprom\Helpers\CloudwatchLogsHelper;
 use Oscillas\Laraprom\Helpers\CloudwatchMonitoringHelper;
 use Oscillas\Laraprom\Helpers\DatadogMonitoringHelper;
+use Oscillas\Laraprom\Reporters\MetricReporterInterface;
 use Oscillas\Laraprom\Reporters\PrometheusMetricReporter;
 use Prometheus\CollectorRegistry;
 use Prometheus\RegistryInterface;
@@ -32,7 +32,7 @@ class LarapromServiceProvider extends ServiceProvider
 
         $this->app->bind(RendererInterface::class, RenderTextFormat::class);
 
-        $this->app->bind(ApplicationMonitoringHelperInterface::class, function ($app) {
+        $this->app->bind(MetricReporterInterface::class, function ($app) {
             $driver = config('application_monitoring.default');
 
             return match ($driver) {
@@ -51,7 +51,7 @@ class LarapromServiceProvider extends ServiceProvider
                         ]
                     ])
                 ),
-                'prometheus' => new PrometheusMetricReporter($this->app->make(RegistryInterface::class)),
+                'prometheus' => new PrometheusMetricReporter($app->make(RegistryInterface::class)),
                 default => throw new \InvalidArgumentException("Unsupported application monitoring driver: {$driver}"),
             };
         });
