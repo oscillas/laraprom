@@ -32,7 +32,7 @@ class LaravelCacheManagerAdapterTest extends TestCase
         $this->assertCount(1, $metrics);
 
         $metricFamily = $metrics[0];
-        $this->assertNotNull($metricFamily, "Metric {$data['name']} not found");
+        $this->assertEquals($data['name'], $metricFamily->getName());
         $this->assertEquals($data['help'], $metricFamily->getHelp());
         $this->assertEquals($data['type'], $metricFamily->getType());
 
