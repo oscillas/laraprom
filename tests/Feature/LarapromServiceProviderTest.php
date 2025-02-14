@@ -4,23 +4,78 @@ namespace Tests\Feature;
 
 use Orchestra\Testbench\Concerns\WithWorkbench;
 use Oscillas\Laraprom\Helpers\ApplicationMonitoringHelperInterface;
+use Oscillas\Laraprom\Helpers\CloudwatchMonitoringHelper;
+use Oscillas\Laraprom\Helpers\DatadogMonitoringHelper;
+use Oscillas\Laraprom\Reporters\EventReporterInterface;
 use Oscillas\Laraprom\Reporters\MetricReporterInterface;
 use Oscillas\Laraprom\Reporters\PrometheusMetricReporter;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class LarapromServiceProviderTest extends TestCase
 {
     use WithWorkbench;
 
-    public function test_prometheus_monitoring_helper_is_resolved()
+    #[Test]
+    public function valid_metric_reporters_get_resolved()
     {
         // Set the configuration for the prometheus driver
-        config(['application_monitoring.default' => 'prometheus']);
-        
-        // Resolve the monitoring helper from the container
-        $helper = $this->app->make(MetricReporterInterface::class);
-        
-        // Assert we get the PrometheusMonitoringHelper
-        $this->assertInstanceOf(PrometheusMetricReporter::class, $helper);
+        config(['application_monitoring.metrics' => 'prometheus']);
+        $reporter = $this->app->make(MetricReporterInterface::class);
+        $this->assertInstanceOf(PrometheusMetricReporter::class, $reporter);
+
+        config(['application_monitoring.metrics' => 'cloudwatch']);
+        $reporter = $this->app->make(MetricReporterInterface::class);
+        $this->assertInstanceOf(CloudwatchMonitoringHelper::class, $reporter);
+
+        config(['application_monitoring.metrics' => 'datadog']);
+        $reporter = $this->app->make(MetricReporterInterface::class);
+        $this->assertInstanceOf(DatadogMonitoringHelper::class, $reporter);
+    }
+
+    #[Test]
+    public function invalid_metric_reporter_causes_exception(): void
+    {
+        # Arrange
+        $invalidDriver = uniqid();
+        config(['application_monitoring.metrics' => $invalidDriver]);
+
+        # Act
+        try {
+            $this->app->make(MetricReporterInterface::class);
+        } catch (\InvalidArgumentException $e) {
+            # Assert
+            $this->assertEquals("Unsupported metric reporter driver: {$invalidDriver}", $e->getMessage());
+            return;
+        }
+
+        $this->fail('Expected InvalidArgumentException was not thrown when an invalid metric reporter driver is set.');
+    }
+
+    #[Test]
+    public function valid_event_reporters_get_resolved(): void
+    {
+        config(['application_monitoring.metrics' => 'datadog']);
+        $reporter = $this->app->make(EventReporterInterface::class);
+        $this->assertInstanceOf(DatadogMonitoringHelper::class, $reporter);
+    }
+
+    #[Test]
+    public function invalid_event_reporter_causes_exception(): void
+    {
+        # Arrange
+        $invalidDriver = uniqid();
+
+        # Act
+        try {
+            config(['application_monitoring.events' => $invalidDriver]);
+            $this->app->make(EventReporterInterface::class);
+        } catch (\InvalidArgumentException $e) {
+            # Assert
+            $this->assertEquals("Unsupported event reporter driver: {$invalidDriver}", $e->getMessage());
+            return;
+        }
+
+        $this->fail('Expected InvalidArgumentException was not thrown when an invalid event reporter driver is set.');
     }
 }

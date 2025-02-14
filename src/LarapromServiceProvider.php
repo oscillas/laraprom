@@ -9,6 +9,7 @@ use Illuminate\Support\ServiceProvider;
 use Oscillas\Laraprom\Helpers\CloudwatchLogsHelper;
 use Oscillas\Laraprom\Helpers\CloudwatchMonitoringHelper;
 use Oscillas\Laraprom\Helpers\DatadogMonitoringHelper;
+use Oscillas\Laraprom\Reporters\EventReporterInterface;
 use Oscillas\Laraprom\Reporters\MetricReporterInterface;
 use Oscillas\Laraprom\Reporters\PrometheusMetricReporter;
 use Prometheus\CollectorRegistry;
@@ -33,7 +34,7 @@ class LarapromServiceProvider extends ServiceProvider
         $this->app->bind(RendererInterface::class, RenderTextFormat::class);
 
         $this->app->bind(MetricReporterInterface::class, function ($app) {
-            $driver = config('application_monitoring.default');
+            $driver = config('application_monitoring.metrics');
 
             return match ($driver) {
                 'cloudwatch' => new CloudwatchMonitoringHelper(
@@ -52,7 +53,24 @@ class LarapromServiceProvider extends ServiceProvider
                     ])
                 ),
                 'prometheus' => new PrometheusMetricReporter($app->make(RegistryInterface::class)),
-                default => throw new \InvalidArgumentException("Unsupported application monitoring driver: {$driver}"),
+                default => throw new \InvalidArgumentException("Unsupported metric reporter driver: {$driver}"),
+            };
+        });
+
+        $this->app->bind(EventReporterInterface::class, function ($app) {
+            $driver = config('application_monitoring.events');
+
+            return match ($driver) {
+                'datadog' => new DatadogMonitoringHelper(
+                    new Client([
+                        'headers' => [
+                            'Content-Type' => 'application/json',
+                            'DD-API-KEY' => config('application_monitoring.drivers.datadog.api_key'),
+                            'DD-APPLICATION-KEY' => config('application_monitoring.drivers.datadog.app_key'),
+                        ]
+                    ])
+                ),
+                default => throw new \InvalidArgumentException("Unsupported event reporter driver: {$driver}"),
             };
         });
     }

@@ -1,7 +1,8 @@
 <?php
 
 return [
-    'default' => env('APPLICATION_MONITORING_DRIVER', 'datadog'),
+    'events' => env('LARAPROM_EVENT_REPORTER', 'datadog'),
+    'metrics' => env('LARAPROM_METRIC_REPORTER', 'datadog'),
 
     'drivers' => [
         'cloudwatch' => [
