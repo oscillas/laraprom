@@ -51,8 +51,8 @@ class DatadogMonitoringHelperTest extends TestCase
         sleep(120); // wait for datadog to post the event ~2min
         $response = $this->client->get('https://api.datadoghq.com/api/v1/events', [
             'headers' => [
-                'DD-API-KEY' => env('DATADOG_API_KEY'),
-                'DD-APPLICATION-KEY' => env('DATADOG_APP_KEY'),
+                'DD-API-KEY' => config('application_monitoring.drivers.datadog.api_key'),
+                'DD-APPLICATION-KEY' => config('application_monitoring.drivers.datadog.app_key'),
             ],
             'query' => [
                 'start' => $start->subMinutes(5)->getTimestamp(),
@@ -91,8 +91,8 @@ class DatadogMonitoringHelperTest extends TestCase
         sleep(120); // wait for datadog to post the event ~2min
         $response = $this->client->get('https://api.datadoghq.com/api/v1/metrics', [
             'headers' => [
-                'DD-API-KEY' => env('DATADOG_API_KEY'),
-                'DD-APPLICATION-KEY' => env('DATADOG_APP_KEY'),
+                'DD-API-KEY' => config('application_monitoring.drivers.datadog.api_key'),
+                'DD-APPLICATION-KEY' => config('application_monitoring.drivers.datadog.app_key'),
             ],
             'query' => [
                 'from' => $start->subMinutes(5)->getTimestamp(),
