@@ -40,10 +40,17 @@ final class PrometheusMonitoringHelperTest extends TestCase
         $namespace = 'test';
         $metricNameOne = 'a_requests_total';
         $metricNameTwo = 'b_requests_failed_total';
+
         $dimensions = ['env' => 'dev'];
         $metrics = [
-            $metricNameOne => 42,
-            $metricNameTwo => 13,
+            $metricNameOne => [
+                'Unit' => 'Count',
+                'Value' => 42
+            ],
+            $metricNameTwo => [
+                'Unit' => 'Count',
+                'Value' => 13
+            ],
         ];
 
         // Act
@@ -67,7 +74,7 @@ final class PrometheusMonitoringHelperTest extends TestCase
             $this->assertCount(1, $samples);
             $sample = $samples[0];
             $this->assertEquals("{$namespace}_{$metricName}", $sample->getName());
-            $this->assertEquals($value, $sample->getValue());
+            $this->assertEquals($value['Value'], $sample->getValue());
             $this->assertEquals($dimensions, $sample->getLabelValues());
         }
     }

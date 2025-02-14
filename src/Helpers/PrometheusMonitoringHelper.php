@@ -21,11 +21,15 @@ class PrometheusMonitoringHelper implements ApplicationMonitoringHelperInterface
         array $dimensions,
         array $metrics
     ): void {
-        foreach ($metrics as $metricName => $value) {
-            // Register a Gauge metric. The first parameter (empty string) is the Prometheus "namespace"
-            // The second is the full name. Labels are the keys of the dimensions array.
-            $gauge = $this->registry->getOrRegisterGauge($namespace, $metricName, 'Automatically registered gauge', array_keys($dimensions));
-            $gauge->set($value, $dimensions);
+        foreach ($metrics as $metricName => $metricData) {
+            // Register a Gauge metric.
+            $gauge = $this->registry->getOrRegisterGauge(
+                $namespace,
+                $metricName,
+                'Automatically registered gauge',
+                array_keys($dimensions)
+            );
+            $gauge->set($metricData['Value'], $dimensions);
         }
     }
 
