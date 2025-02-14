@@ -4,15 +4,12 @@ declare(strict_types=1);
 
 namespace Oscillas\Laraprom\Helpers;
 
-class CloudwatchMonitoringHelper implements ApplicationMonitoringHelperInterface
+use Oscillas\Laraprom\Reporters\MetricReporterInterface;
+
+class CloudwatchMonitoringHelper implements MetricReporterInterface
 {
     public function __construct(protected CloudwatchLogsHelperInterface $cloudwatchLogsHelper)
     {
-    }
-
-    public function putEvent(string $title, int $unixTimestampMillis, array $dimensions, string $text): void
-    {
-        throw new \BadMethodCallException("Function 'putEvent' is not yet implemented for CloudwatchLoggingHelper");
     }
 
     public function putMetric(string $namespace, int $unixTimestampMillis, array $dimensions, array $metrics): void

@@ -61,20 +61,4 @@ class CloudwatchMonitoringHelperTest extends TestCase
         # Act
         $this->cloudwatchMonitoringHelper->putMetric($namespace, $unixTimestampInMillis, $dimensions, $metrics);
     }
-
-    #[Test]
-    public function throw_exception_for_put_event_function(): void
-    {
-        # Arrange
-        $title = 'Local Testing';
-        $dimensions = ['DimensionOne' => bin2hex(random_bytes(16))];
-        $text = 'This is a test event';
-        $unixTimestampInMillis = (int) CarbonImmutable::now()->valueOf();
-
-        $this->expectException(\BadMethodCallException::class);
-        $this->expectExceptionMessage("Function 'putEvent' is not yet implemented for CloudwatchLoggingHelper");
-
-        # Act
-        $this->cloudwatchMonitoringHelper->putEvent($title, $unixTimestampInMillis, $dimensions, $text);
-    }
 }
