@@ -4,7 +4,8 @@
     "license": "MIT",
     "require-dev": {
         "orchestra/testbench": "^9.9",
-        "phpunit/phpunit": "^11"
+        "phpunit/phpunit": "^11",
+        "phpstan/phpstan": "^2.1"
     },
     "autoload": {
         "psr-4": {
