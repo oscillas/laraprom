@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Oscillas\Laraprom\Helpers;
 
+use InvalidArgumentException;
 use Prometheus\CollectorRegistry;
+use Prometheus\Exception\MetricsRegistrationException;
 
 class PrometheusMonitoringHelper implements ApplicationMonitoringHelperInterface
 {
@@ -15,12 +17,19 @@ class PrometheusMonitoringHelper implements ApplicationMonitoringHelperInterface
         $this->registry = $registry;
     }
 
+    /**
+     * @throws InvalidArgumentException|MetricsRegistrationException
+     */
     public function putMetric(
         string $namespace,
         int $unixTimestampMillis,
         array $dimensions,
         array $metrics
     ): void {
+        if ([] === $metrics) {
+            throw new InvalidArgumentException('$metrics array cannot be empty.');
+        }
+
         foreach ($metrics as $metricName => $metricData) {
             // Register a Gauge metric.
             $gauge = $this->registry->getOrRegisterGauge(

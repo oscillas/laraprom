@@ -78,4 +78,26 @@ final class PrometheusMonitoringHelperTest extends TestCase
             $this->assertEquals($dimensions, $sample->getLabelValues());
         }
     }
+
+    #[Test]
+    public function putting_empty_metrics_causes_invalid_argument_exception(): void
+    {
+        // Arrange
+        $registry = new CollectorRegistry(new InMemory(), false);
+        $helper = new PrometheusMonitoringHelper($registry);
+        $namespace = 'test';
+        $dimensions = ['env' => 'dev'];
+
+        // Act
+        try {
+            $helper->putMetric($namespace, 0, $dimensions, []);
+        } catch (\InvalidArgumentException $e) {
+            // Assert
+            $this->assertEquals('$metrics array cannot be empty.', $e->getMessage());
+            $this->assertEmpty($registry->getMetricFamilySamples());
+            return;
+        }
+
+        $this->fail('Expected InvalidArgumentException was not thrown when $metrics argument is an empty array.');
+    }
 }
