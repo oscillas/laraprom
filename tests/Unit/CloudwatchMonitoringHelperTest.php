@@ -5,21 +5,21 @@ declare(strict_types=1);
 namespace Tests\Unit;
 
 use Carbon\CarbonImmutable;
-use Oscillas\Laraprom\Helpers\CloudwatchMonitoringHelper;
-use Tests\TestCase;
+use Oscillas\Laraprom\Reporters\CloudwatchMetricReporter;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\TestCase;
 use Tests\TestDoubles\Listeners\FakeCloudwatchLogsHelper;
 
 class CloudwatchMonitoringHelperTest extends TestCase
 {
-    private CloudwatchMonitoringHelper $cloudwatchMonitoringHelper;
+    private CloudwatchMetricReporter $cloudwatchMonitoringHelper;
     private FakeCloudwatchLogsHelper $cloudwatchLogsHelper;
 
     protected function setUp(): void
     {
         parent::setUp();
         $this->cloudwatchLogsHelper = new FakeCloudwatchLogsHelper();
-        $this->cloudwatchMonitoringHelper = new CloudwatchMonitoringHelper($this->cloudwatchLogsHelper);
+        $this->cloudwatchMonitoringHelper = new CloudwatchMetricReporter($this->cloudwatchLogsHelper);
     }
 
     #[Test]

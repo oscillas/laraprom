@@ -7,7 +7,7 @@ namespace Oscillas\Laraprom;
 use GuzzleHttp\Client;
 use Illuminate\Support\ServiceProvider;
 use Oscillas\Laraprom\Helpers\CloudwatchLogsHelper;
-use Oscillas\Laraprom\Helpers\CloudwatchMonitoringHelper;
+use Oscillas\Laraprom\Reporters\CloudwatchMetricReporter;
 use Oscillas\Laraprom\Reporters\DatadogReporter;
 use Oscillas\Laraprom\Reporters\EventReporterInterface;
 use Oscillas\Laraprom\Reporters\MetricReporterInterface;
@@ -37,7 +37,7 @@ class LarapromServiceProvider extends ServiceProvider
             $driver = config('application_monitoring.metrics');
 
             return match ($driver) {
-                'cloudwatch' => new CloudwatchMonitoringHelper(
+                'cloudwatch' => new CloudwatchMetricReporter(
                     new CloudwatchLogsHelper(
                         new Client(),
                         config('application_monitoring.drivers.cloudwatch.region'),

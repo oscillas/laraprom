@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Oscillas\Laraprom\Helpers;
+namespace Oscillas\Laraprom\Reporters;
 
-use Oscillas\Laraprom\Reporters\MetricReporterInterface;
+use Oscillas\Laraprom\Helpers\CloudwatchLogsHelperInterface;
 
-class CloudwatchMonitoringHelper implements MetricReporterInterface
+class CloudwatchMetricReporter implements MetricReporterInterface
 {
     public function __construct(protected CloudwatchLogsHelperInterface $cloudwatchLogsHelper)
     {
