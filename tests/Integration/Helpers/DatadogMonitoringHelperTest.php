@@ -23,7 +23,7 @@ class DatadogMonitoringHelperTest extends TestCase
     {
         parent::setUp();
         $this->client = new Client();
-        $this->datadogHelper = app(ApplicationMonitoringHelperInterface::class);
+        $this->datadogHelper = $this->app->make(DatadogMonitoringHelper::class);
     }
 
     #[Test]
