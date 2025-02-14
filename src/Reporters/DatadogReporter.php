@@ -2,13 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Oscillas\Laraprom\Helpers;
+namespace Oscillas\Laraprom\Reporters;
 
 use GuzzleHttp\Client;
-use Oscillas\Laraprom\Reporters\EventReporterInterface;
-use Oscillas\Laraprom\Reporters\MetricReporterInterface;
 
-class DatadogMonitoringHelper implements EventReporterInterface, MetricReporterInterface
+class DatadogReporter implements EventReporterInterface, MetricReporterInterface
 {
     public function __construct(protected Client $guzzleClient)
     {

@@ -8,7 +8,7 @@ use GuzzleHttp\Client;
 use Illuminate\Support\ServiceProvider;
 use Oscillas\Laraprom\Helpers\CloudwatchLogsHelper;
 use Oscillas\Laraprom\Helpers\CloudwatchMonitoringHelper;
-use Oscillas\Laraprom\Helpers\DatadogMonitoringHelper;
+use Oscillas\Laraprom\Reporters\DatadogReporter;
 use Oscillas\Laraprom\Reporters\EventReporterInterface;
 use Oscillas\Laraprom\Reporters\MetricReporterInterface;
 use Oscillas\Laraprom\Reporters\PrometheusMetricReporter;
@@ -43,7 +43,7 @@ class LarapromServiceProvider extends ServiceProvider
                         config('application_monitoring.drivers.cloudwatch.region'),
                     )
                 ),
-                'datadog' => new DatadogMonitoringHelper(
+                'datadog' => new DatadogReporter(
                     new Client([
                         'headers' => [
                             'Content-Type' => 'application/json',
@@ -61,7 +61,7 @@ class LarapromServiceProvider extends ServiceProvider
             $driver = config('application_monitoring.events');
 
             return match ($driver) {
-                'datadog' => new DatadogMonitoringHelper(
+                'datadog' => new DatadogReporter(
                     new Client([
                         'headers' => [
                             'Content-Type' => 'application/json',

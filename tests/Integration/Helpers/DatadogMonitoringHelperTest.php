@@ -7,7 +7,7 @@ namespace Tests\Integration\Helpers;
 use Carbon\CarbonImmutable;
 use GuzzleHttp\Client;
 use Orchestra\Testbench\Concerns\WithWorkbench;
-use Oscillas\Laraprom\Helpers\DatadogMonitoringHelper;
+use Oscillas\Laraprom\Reporters\DatadogReporter;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
@@ -16,13 +16,13 @@ class DatadogMonitoringHelperTest extends TestCase
     use WithWorkbench;
 
     private Client $client;
-    private DatadogMonitoringHelper $datadogHelper;
+    private DatadogReporter $datadogHelper;
 
     protected function setUp(): void
     {
         parent::setUp();
         $this->client = new Client();
-        $this->datadogHelper = $this->app->make(DatadogMonitoringHelper::class);
+        $this->datadogHelper = $this->app->make(DatadogReporter::class);
     }
 
     #[Test]

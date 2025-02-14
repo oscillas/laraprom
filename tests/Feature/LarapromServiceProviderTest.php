@@ -3,9 +3,8 @@
 namespace Tests\Feature;
 
 use Orchestra\Testbench\Concerns\WithWorkbench;
-use Oscillas\Laraprom\Helpers\ApplicationMonitoringHelperInterface;
 use Oscillas\Laraprom\Helpers\CloudwatchMonitoringHelper;
-use Oscillas\Laraprom\Helpers\DatadogMonitoringHelper;
+use Oscillas\Laraprom\Reporters\DatadogReporter;
 use Oscillas\Laraprom\Reporters\EventReporterInterface;
 use Oscillas\Laraprom\Reporters\MetricReporterInterface;
 use Oscillas\Laraprom\Reporters\PrometheusMetricReporter;
@@ -30,7 +29,7 @@ class LarapromServiceProviderTest extends TestCase
 
         config(['application_monitoring.metrics' => 'datadog']);
         $reporter = $this->app->make(MetricReporterInterface::class);
-        $this->assertInstanceOf(DatadogMonitoringHelper::class, $reporter);
+        $this->assertInstanceOf(DatadogReporter::class, $reporter);
     }
 
     #[Test]
@@ -57,7 +56,7 @@ class LarapromServiceProviderTest extends TestCase
     {
         config(['application_monitoring.metrics' => 'datadog']);
         $reporter = $this->app->make(EventReporterInterface::class);
-        $this->assertInstanceOf(DatadogMonitoringHelper::class, $reporter);
+        $this->assertInstanceOf(DatadogReporter::class, $reporter);
     }
 
     #[Test]
