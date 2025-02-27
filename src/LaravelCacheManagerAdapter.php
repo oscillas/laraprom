@@ -8,7 +8,7 @@ use Prometheus\Storage\InMemory;
 
 class LaravelCacheManagerAdapter extends InMemory implements Adapter
 {
-    const string CACHE_KEY = 'LARAPROM_PROMETHEUS_METRICS';
+    const CACHE_KEY = 'LARAPROM_PROMETHEUS_METRICS';
 
     public function __construct(protected CacheManager $cache)
     {
