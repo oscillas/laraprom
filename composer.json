@@ -1,6 +1,5 @@
 {
     "name": "oscillas/laraprom",
-    "version": "0.1.0",
     "license": "MIT",
     "require-dev": {
         "orchestra/testbench": "^9.9",
@@ -37,7 +36,7 @@
     },
     "require": {
         "php": "^8",
-        "laravel/framework": "^11",
+        "laravel/framework": "^10 || ^11",
         "promphp/prometheus_client_php": "^2.13",
         "aws/aws-sdk-php": " ^3.323",
         "guzzlehttp/guzzle": "^7.4"
