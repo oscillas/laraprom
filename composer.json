@@ -36,7 +36,7 @@
     },
     "require": {
         "php": "^8",
-        "laravel/framework": "^10 || ^11",
+        "laravel/framework": "^10 || ^11 || ^12",
         "promphp/prometheus_client_php": "^2.13",
         "aws/aws-sdk-php": " ^3.323",
         "guzzlehttp/guzzle": "^7.4"
