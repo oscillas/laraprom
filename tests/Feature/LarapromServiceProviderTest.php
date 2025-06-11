@@ -7,7 +7,7 @@ use Oscillas\Laraprom\Reporters\CloudwatchMetricReporter;
 use Oscillas\Laraprom\Reporters\DatadogReporter;
 use Oscillas\Laraprom\Reporters\EventReporterInterface;
 use Oscillas\Laraprom\Reporters\MetricReporterInterface;
-use Oscillas\Laraprom\Reporters\NullMetricReporter;
+use Oscillas\Laraprom\Reporters\VoidMetricReporter;
 use Oscillas\Laraprom\Reporters\PrometheusMetricReporter;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
@@ -32,9 +32,9 @@ class LarapromServiceProviderTest extends TestCase
         $reporter = $this->app->make(MetricReporterInterface::class);
         $this->assertInstanceOf(DatadogReporter::class, $reporter);
 
-        config(['application_monitoring.metrics' => 'null']);
+        config(['application_monitoring.metrics' => 'void']);
         $reporter = $this->app->make(MetricReporterInterface::class);
-        $this->assertInstanceOf(NullMetricReporter::class, $reporter);
+        $this->assertInstanceOf(VoidMetricReporter::class, $reporter);
     }
 
     #[Test]

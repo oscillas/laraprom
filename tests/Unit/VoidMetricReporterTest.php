@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace Tests\Unit;
 
-use Oscillas\Laraprom\Reporters\NullMetricReporter;
+use Oscillas\Laraprom\Reporters\VoidMetricReporter;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
-final class NullMetricReporterTest extends TestCase
+final class VoidMetricReporterTest extends TestCase
 {
 
     #[Test]
     public function does_nothing(): void
     {
-        $reporter = new NullMetricReporter();
+        $reporter = new VoidMetricReporter();
 
         $reporter->putMetric(
             'TestNamespace',
