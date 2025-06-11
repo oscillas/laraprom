@@ -13,5 +13,6 @@ return [
             'app_key' => env('DATADOG_APP_KEY'),
         ],
         'prometheus' => [],
+        'null' => [],
     ],
 ];

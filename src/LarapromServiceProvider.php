@@ -11,6 +11,7 @@ use Oscillas\Laraprom\Reporters\CloudwatchMetricReporter;
 use Oscillas\Laraprom\Reporters\DatadogReporter;
 use Oscillas\Laraprom\Reporters\EventReporterInterface;
 use Oscillas\Laraprom\Reporters\MetricReporterInterface;
+use Oscillas\Laraprom\Reporters\NullMetricReporter;
 use Oscillas\Laraprom\Reporters\PrometheusMetricReporter;
 use Prometheus\CollectorRegistry;
 use Prometheus\RegistryInterface;
@@ -52,6 +53,7 @@ class LarapromServiceProvider extends ServiceProvider
                         ]
                     ])
                 ),
+                'null' => new NullMetricReporter(),
                 'prometheus' => new PrometheusMetricReporter($app->make(RegistryInterface::class)),
                 default => throw new \InvalidArgumentException("Unsupported metric reporter driver: {$driver}"),
             };
