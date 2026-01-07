@@ -7,6 +7,7 @@ use Oscillas\Laraprom\Reporters\CloudwatchMetricReporter;
 use Oscillas\Laraprom\Reporters\DatadogReporter;
 use Oscillas\Laraprom\Reporters\EventReporterInterface;
 use Oscillas\Laraprom\Reporters\MetricReporterInterface;
+use Oscillas\Laraprom\Reporters\VoidEventReporter;
 use Oscillas\Laraprom\Reporters\VoidMetricReporter;
 use Oscillas\Laraprom\Reporters\PrometheusMetricReporter;
 use PHPUnit\Framework\Attributes\Test;
@@ -59,9 +60,13 @@ class LarapromServiceProviderTest extends TestCase
     #[Test]
     public function valid_event_reporters_get_resolved(): void
     {
-        config(['application_monitoring.metrics' => 'datadog']);
+        config(['application_monitoring.events' => 'datadog']);
         $reporter = $this->app->make(EventReporterInterface::class);
         $this->assertInstanceOf(DatadogReporter::class, $reporter);
+
+        config(['application_monitoring.events' => 'void']);
+        $reporter = $this->app->make(EventReporterInterface::class);
+        $this->assertInstanceOf(VoidEventReporter::class, $reporter);
     }
 
     #[Test]
