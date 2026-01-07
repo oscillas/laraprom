@@ -11,6 +11,7 @@ use Oscillas\Laraprom\Reporters\CloudwatchMetricReporter;
 use Oscillas\Laraprom\Reporters\DatadogReporter;
 use Oscillas\Laraprom\Reporters\EventReporterInterface;
 use Oscillas\Laraprom\Reporters\MetricReporterInterface;
+use Oscillas\Laraprom\Reporters\VoidEventReporter;
 use Oscillas\Laraprom\Reporters\VoidMetricReporter;
 use Oscillas\Laraprom\Reporters\PrometheusMetricReporter;
 use Prometheus\CollectorRegistry;
@@ -72,6 +73,7 @@ class LarapromServiceProvider extends ServiceProvider
                         ]
                     ])
                 ),
+                'void' => new VoidEventReporter(),
                 default => throw new \InvalidArgumentException("Unsupported event reporter driver: {$driver}"),
             };
         });
