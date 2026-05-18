@@ -18,7 +18,13 @@ return [
     |--------------------------------------------------------------------------
     |
     | This option controls the metric reporter driver used to send metrics.
-    | Supported drivers: "cloudwatch", "datadog", "prometheus", "void"
+    |
+    | Supported drivers:
+    |   "cloudwatch"     - Standard CloudWatch Metrics API (putMetricData)
+    |   "cloudwatch_emf" - CloudWatch Embedded Metric Format via log events (putLogEvents)
+    |   "datadog"        - Datadog API
+    |   "prometheus"     - Prometheus gauges via the /metrics endpoint
+    |   "void"           - No-op, discards all metrics
     |
     */
     'metrics' => env('LARAPROM_METRIC_REPORTER', 'datadog'),
@@ -34,6 +40,9 @@ return [
     */
     'drivers' => [
         'cloudwatch' => [
+            'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
+        ],
+        'cloudwatch_emf' => [
             'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
         ],
         'datadog' => [

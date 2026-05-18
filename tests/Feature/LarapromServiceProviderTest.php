@@ -29,6 +29,10 @@ class LarapromServiceProviderTest extends TestCase
         $reporter = $this->app->make(MetricReporterInterface::class);
         $this->assertInstanceOf(CloudwatchMetricReporter::class, $reporter);
 
+        config(['application_monitoring.metrics' => 'cloudwatch_emf']);
+        $reporter = $this->app->make(MetricReporterInterface::class);
+        $this->assertInstanceOf(CloudwatchMetricReporter::class, $reporter);
+
         config(['application_monitoring.metrics' => 'datadog']);
         $reporter = $this->app->make(MetricReporterInterface::class);
         $this->assertInstanceOf(DatadogReporter::class, $reporter);

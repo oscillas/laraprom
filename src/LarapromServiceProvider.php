@@ -9,6 +9,7 @@ use Illuminate\Support\ServiceProvider;
 use Oscillas\Laraprom\Helpers\CloudwatchLogsHelper;
 use Oscillas\Laraprom\Reporters\CloudwatchMetricReporter;
 use Oscillas\Laraprom\Transports\CloudwatchEmfTransport;
+use Oscillas\Laraprom\Transports\CloudwatchPutMetricDataTransport;
 use Oscillas\Laraprom\Reporters\DatadogReporter;
 use Oscillas\Laraprom\Reporters\EventReporterInterface;
 use Oscillas\Laraprom\Reporters\MetricReporterInterface;
@@ -41,10 +42,16 @@ class LarapromServiceProvider extends ServiceProvider
 
             return match ($driver) {
                 'cloudwatch' => new CloudwatchMetricReporter(
+                    new CloudwatchPutMetricDataTransport(
+                        new Client(),
+                        config('application_monitoring.drivers.cloudwatch.region'),
+                    )
+                ),
+                'cloudwatch_emf' => new CloudwatchMetricReporter(
                     new CloudwatchEmfTransport(
                         new CloudwatchLogsHelper(
                             new Client(),
-                            config('application_monitoring.drivers.cloudwatch.region'),
+                            config('application_monitoring.drivers.cloudwatch_emf.region'),
                         )
                     )
                 ),
