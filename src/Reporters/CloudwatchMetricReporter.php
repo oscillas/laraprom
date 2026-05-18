@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Oscillas\Laraprom\Reporters;
 
-use Oscillas\Laraprom\Helpers\CloudwatchLogsHelperInterface;
+use Oscillas\Laraprom\Transports\CloudwatchTransportInterface;
 
 class CloudwatchMetricReporter implements MetricReporterInterface
 {
-    public function __construct(protected CloudwatchLogsHelperInterface $cloudwatchLogsHelper)
+    public function __construct(protected CloudwatchTransportInterface $transport)
     {
     }
 
@@ -18,15 +18,6 @@ class CloudwatchMetricReporter implements MetricReporterInterface
             throw new \InvalidArgumentException('TenantUUID must be present in dimensions array');
         }
 
-        $logStream = "{$dimensions['TenantUUID']}/pipelines";
-
-        $this->cloudwatchLogsHelper->putEmbeddedMetric(
-            '/artemis/cloud',
-            $logStream,
-            $namespace,
-            $unixTimestampMillis,
-            $dimensions,
-            $metrics,
-        );
+        $this->transport->sendMetrics($namespace, $unixTimestampMillis, $dimensions, $metrics);
     }
 }

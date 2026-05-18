@@ -8,24 +8,23 @@ use Carbon\CarbonImmutable;
 use Oscillas\Laraprom\Reporters\CloudwatchMetricReporter;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
-use Tests\TestDoubles\Listeners\FakeCloudwatchLogsHelper;
+use Tests\TestDoubles\Listeners\FakeCloudwatchTransport;
 
 class CloudwatchMonitoringHelperTest extends TestCase
 {
     private CloudwatchMetricReporter $cloudwatchMonitoringHelper;
-    private FakeCloudwatchLogsHelper $cloudwatchLogsHelper;
+    private FakeCloudwatchTransport $transport;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->cloudwatchLogsHelper = new FakeCloudwatchLogsHelper();
-        $this->cloudwatchMonitoringHelper = new CloudwatchMetricReporter($this->cloudwatchLogsHelper);
+        $this->transport = new FakeCloudwatchTransport();
+        $this->cloudwatchMonitoringHelper = new CloudwatchMetricReporter($this->transport);
     }
 
     #[Test]
-    public function push_metrics_to_cloudwatch_in_expected_format(): void
+    public function delegates_metrics_to_transport(): void
     {
-        # Arrange
         $tenantId = bin2hex(random_bytes(16));
 
         $namespace = 'Local/Testing/Namespace';
@@ -35,11 +34,9 @@ class CloudwatchMonitoringHelperTest extends TestCase
 
         $this->cloudwatchMonitoringHelper->putMetric($namespace, $unixTimestampInMillis, $dimensions, $metrics);
 
-        $this->assertArrayHasKey('/artemis/cloud', $this->cloudwatchLogsHelper->putPipelineRunFailureEmbeddedMetric);
-        $this->assertArrayHasKey("$tenantId/pipelines", $this->cloudwatchLogsHelper->putPipelineRunFailureEmbeddedMetric['/artemis/cloud']);
-        $this->assertCount(1, $this->cloudwatchLogsHelper->putPipelineRunFailureEmbeddedMetric['/artemis/cloud']["$tenantId/pipelines"]);
+        $this->assertCount(1, $this->transport->calls);
 
-        $datum = $this->cloudwatchLogsHelper->putPipelineRunFailureEmbeddedMetric['/artemis/cloud']["$tenantId/pipelines"][0];
+        $datum = $this->transport->calls[0];
         $this->assertEquals($namespace, $datum['Namespace']);
         $this->assertEquals($unixTimestampInMillis, $datum['Timestamp']);
         $this->assertEquals($dimensions, $datum['Dimensions']);
@@ -49,7 +46,6 @@ class CloudwatchMonitoringHelperTest extends TestCase
     #[Test]
     public function require_tenant_uuid_to_be_present_in_dimensions_array(): void
     {
-        # Arrange
         $namespace = 'Local/Testing/Namespace';
         $dimensions = ['DimensionOne' => bin2hex(random_bytes(16))];
         $metrics = ['MetricOne' => ['Value' => 1, 'Unit' => 'Count']];
@@ -58,7 +54,6 @@ class CloudwatchMonitoringHelperTest extends TestCase
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('TenantUUID must be present in dimensions array');
 
-        # Act
         $this->cloudwatchMonitoringHelper->putMetric($namespace, $unixTimestampInMillis, $dimensions, $metrics);
     }
 }
