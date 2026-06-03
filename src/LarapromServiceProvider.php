@@ -13,6 +13,8 @@ use Oscillas\Laraprom\Transports\CloudwatchPutMetricDataTransport;
 use Oscillas\Laraprom\Reporters\DatadogReporter;
 use Oscillas\Laraprom\Reporters\EventReporterInterface;
 use Oscillas\Laraprom\Reporters\MetricReporterInterface;
+use Oscillas\Laraprom\Reporters\OtlpMetricReporter;
+use Oscillas\Laraprom\Transports\OtlpHttpTransport;
 use Oscillas\Laraprom\Reporters\VoidEventReporter;
 use Oscillas\Laraprom\Reporters\VoidMetricReporter;
 use Oscillas\Laraprom\Reporters\PrometheusMetricReporter;
@@ -66,6 +68,15 @@ class LarapromServiceProvider extends ServiceProvider
                 ),
                 'void' => new VoidMetricReporter(),
                 'prometheus' => new PrometheusMetricReporter($app->make(RegistryInterface::class)),
+                'otlp' => new OtlpMetricReporter(
+                    new OtlpHttpTransport(
+                        new Client(),
+                        config('application_monitoring.drivers.otlp.endpoint'),
+                        config('application_monitoring.drivers.otlp.service_name'),
+                        config('application_monitoring.drivers.otlp.instance_id'),
+                        config('application_monitoring.drivers.otlp.token'),
+                    )
+                ),
                 default => throw new \InvalidArgumentException("Unsupported metric reporter driver: {$driver}"),
             };
         });
