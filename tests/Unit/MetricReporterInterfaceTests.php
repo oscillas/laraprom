@@ -113,4 +113,92 @@ trait MetricReporterInterfaceTests
             $this->assertDidNotSubmitAnyMetrics();
         }
     }
+
+    #[Test]
+    public function falsy_but_present_values_and_units_pass_validation(): void
+    {
+        // Arrange
+        $reporter = $this->getMetricReporter();
+
+        // 0, 0.0, and '' are falsy but valid — guards the isset() checks
+        // against an empty()-style refactor.
+        $namespace = 'test_namespace';
+        $unixTimestampMillis = (int) (microtime(true) * 1000);
+        $dimensions = ['env' => 'dev'];
+        $metrics = [
+            'a_queue_depth' => [
+                'Unit' => 'Count',
+                'Value' => 0
+            ],
+            'b_error_rate' => [
+                'Unit' => 'Percent',
+                'Value' => 0.0
+            ],
+            'c_unitless_total' => [
+                'Unit' => '',
+                'Value' => 1
+            ],
+        ];
+
+        // Act
+        $reporter->putMetric($namespace, $unixTimestampMillis, $dimensions, $metrics);
+
+        // Assert
+        $this->assertMetricsSubmitted($namespace, $unixTimestampMillis, $dimensions, $metrics);
+    }
+
+    #[Test]
+    public function a_null_value_or_unit_is_rejected_as_missing(): void
+    {
+        // Arrange
+        $reporter = $this->getMetricReporter();
+
+        // Act — isset() treats null as absent.
+        try {
+            $reporter->putMetric('doesnt_matter', 0, ['foo' => 'bar'], [
+                'invalid_metric' => ['Value' => null, 'Unit' => 'Count']
+            ]);
+
+            $this->fail('Expected InvalidArgumentException was not thrown for a null "Value".');
+        } catch (\InvalidArgumentException $e) {
+            // Assert
+            $this->assertEquals('Each metric must have a "Value" key.', $e->getMessage());
+            $this->assertDidNotSubmitAnyMetrics();
+        }
+
+        try {
+            $reporter->putMetric('doesnt_matter', 0, ['foo' => 'bar'], [
+                'invalid_metric' => ['Value' => 42, 'Unit' => null]
+            ]);
+
+            $this->fail('Expected InvalidArgumentException was not thrown for a null "Unit".');
+        } catch (\InvalidArgumentException $e) {
+            // Assert
+            $this->assertEquals('Each metric must have a "Unit" key.', $e->getMessage());
+            $this->assertDidNotSubmitAnyMetrics();
+        }
+    }
+
+    #[Test]
+    public function an_invalid_metric_anywhere_in_the_array_prevents_any_submission(): void
+    {
+        // Arrange
+        $reporter = $this->getMetricReporter();
+
+        $metrics = [
+            'valid_metric' => ['Unit' => 'Count', 'Value' => 1],
+            'invalid_metric' => ['Value' => 2],
+        ];
+
+        // Act
+        try {
+            $reporter->putMetric('doesnt_matter', 0, ['foo' => 'bar'], $metrics);
+
+            $this->fail('Expected InvalidArgumentException was not thrown for an invalid metric after a valid one.');
+        } catch (\InvalidArgumentException $e) {
+            // Assert
+            $this->assertEquals('Each metric must have a "Unit" key.', $e->getMessage());
+            $this->assertDidNotSubmitAnyMetrics();
+        }
+    }
 }

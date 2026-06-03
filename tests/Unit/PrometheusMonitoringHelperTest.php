@@ -35,7 +35,7 @@ final class PrometheusMonitoringHelperTest extends TestCase
     ): void {
         // Assert
         $metricFamilySamples = $this->registry->getMetricFamilySamples(sortMetrics: true);
-        $this->assertCount(2, $metricFamilySamples);
+        $this->assertCount(count($expectedMetrics), $metricFamilySamples);
 
         $counter = 0;
         foreach ($expectedMetrics as $metricName => $value) {
