@@ -26,9 +26,14 @@ final class PrometheusMetricsControllerTest extends TestCase
     private function assertSuccessfulPrometheusResponse($response): void
     {
         $response->assertStatus(200);
-        $response->assertHeader(
-            'Content-Type',
+        // Every token in this value is case-insensitive (media type per RFC 9110,
+        // charset per RFC 2046), and the charset casing emitted by the framework has
+        // changed across versions. NOTE: some Content-Type parameters ARE case-sensitive
+        // (multipart "boundary", protobuf "proto=") — if this assertion ever covers one,
+        // stop comparing the whole header ignoring case.
+        $this->assertEqualsIgnoringCase(
             'text/plain; version=0.0.4; charset=UTF-8',
+            $response->headers->get('Content-Type'),
         );
     }
 
