@@ -62,6 +62,5 @@ return [
             'service_name' => env('LARAPROM_OTLP_SERVICE_NAME', env('APP_NAME', 'laraprom')),
         ],
         'prometheus' => [],
-        'null' => [],
     ],
 ];
