@@ -154,7 +154,8 @@ class OtlpHttpTransport implements OtlpTransportInterface
     private function toUcumUnit(string $unit): string
     {
         return match ($unit) {
-            'Count', 'None' => '1',
+            'Count' => '{count}',
+            'None' => '',
             'Seconds' => 's',
             'Microseconds' => 'us',
             'Milliseconds' => 'ms',

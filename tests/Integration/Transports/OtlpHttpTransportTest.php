@@ -92,7 +92,7 @@ class OtlpHttpTransportTest extends TestCase
 
         $metricOne = $scopeMetrics['metrics'][0];
         $this->assertEquals('test_namespace.requests_total', $metricOne['name']);
-        $this->assertEquals('1', $metricOne['unit']);
+        $this->assertEquals('{count}', $metricOne['unit']);
         $dataPointOne = $metricOne['gauge']['dataPoints'][0];
         $this->assertEquals($expectedAttributes, $dataPointOne['attributes']);
         $this->assertSame($expectedTimeUnixNano, $dataPointOne['timeUnixNano']);
@@ -150,8 +150,8 @@ class OtlpHttpTransportTest extends TestCase
     public function converts_units_to_ucum_and_passes_unknown_units_through(): void
     {
         $unitMap = [
-            'Count' => '1',
-            'None' => '1',
+            'Count' => '{count}',
+            'None' => '',
             'Seconds' => 's',
             'Microseconds' => 'us',
             'Milliseconds' => 'ms',
